@@ -51,14 +51,14 @@ if [[ "$BOUND_SA" != "ok" ]]; then
 fi
 
 CAN_LIST=$(kubectl auth can-i list nodes \
-  --as=system:serviceaccount:inspect-ns:node-inspector 2>/dev/null)
+  --as=system:serviceaccount:inspect-ns:node-inspector 2>/dev/null || true)
 if [[ "$CAN_LIST" != "yes" ]]; then
   echo "FAIL: node-inspector cannot list nodes (got: $CAN_LIST)"
   exit 1
 fi
 
 CAN_DELETE=$(kubectl auth can-i delete nodes \
-  --as=system:serviceaccount:inspect-ns:node-inspector 2>/dev/null)
+  --as=system:serviceaccount:inspect-ns:node-inspector 2>/dev/null || true)
 if [[ "$CAN_DELETE" != "no" ]]; then
   echo "FAIL: node-inspector should NOT be able to delete nodes (got: $CAN_DELETE)"
   exit 1
