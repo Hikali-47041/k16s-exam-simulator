@@ -57,6 +57,13 @@ if [[ "$CAN_LIST" != "yes" ]]; then
   exit 1
 fi
 
+CAN_GET_STATUS=$(kubectl auth can-i get nodes/status \
+  --as=system:serviceaccount:inspect-ns:node-inspector 2>/dev/null || true)
+if [[ "$CAN_LIST_STATUS" != "yes" ]]; then
+  echo "FAIL: node-inspector cannot get nodes/status (got: $CAN_LIST_STATUS)"
+  exit 1
+fi
+
 CAN_DELETE=$(kubectl auth can-i delete nodes \
   --as=system:serviceaccount:inspect-ns:node-inspector 2>/dev/null || true)
 if [[ "$CAN_DELETE" != "no" ]]; then
